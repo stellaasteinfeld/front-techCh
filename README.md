@@ -8,6 +8,8 @@ Please answer this questions:
 3. What’s webpack and why is it used for? Do you know other similar tools?
 4. What is twhy is it useful? Can you briefly explain how it is implemented in React?
 5. Can you briefly explain how ReactJs Fiber works?
+
+
 Pick two of the following questions:
 6. How would you implement currying using closures? Please give an example.
 7. Can you explain JS hoisting with an example?
