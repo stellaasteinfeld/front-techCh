@@ -1,0 +1,14 @@
+.alarms {
+  padding-top: 90px;
+  padding-left: 50px;
+  h1 {
+    margin-bottom: 50px;
+  }
+  &--table {
+    margin-top: 50px;
+  }
+  &--new {
+    margin-top: 20px;
+    border-radius: 50%;
+  }
+}
