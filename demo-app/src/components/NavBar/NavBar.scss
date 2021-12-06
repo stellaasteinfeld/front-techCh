@@ -1,5 +1,10 @@
 .leftNav {
-  max-width: 200px;
+  max-width: 100px;
   height: 100vh;
   position: absolute;
+  align-items: flex-start !important;
+  padding-top: 60px !important;
+  &--buttons {
+    margin-top: 20px;
+  }
 }
