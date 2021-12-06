@@ -10,7 +10,7 @@ import './FixedTopNav.scss';
 
 export default function NavBar() {
     return (
-        <Navbar>
+        <Navbar fixed="top"  bg="light">
             <Container>
                 <Navbar.Brand>Technical Challenge</Navbar.Brand>
                 <div className="justify-content-end">
