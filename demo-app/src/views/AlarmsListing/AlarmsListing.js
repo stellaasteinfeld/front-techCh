@@ -1,7 +1,9 @@
 import React, {useState} from "react";
+import MockBackend from '../../mockdata';
+import AddAlarm from "./AddAlarm";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from 'react-bootstrap/Col';
@@ -9,16 +11,11 @@ import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
-import Modal from "react-bootstrap/Modal";
-
 
 import './AlarmsListing.scss';
 
 export default function AlarmsListing() {
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [alarms, setAlarms] = useState(MockBackend.listAlarms);
 
     return (
         <Container className="alarms">
@@ -45,9 +42,8 @@ export default function AlarmsListing() {
                         </Form.Label>
                         <Form.Select className="me-sm-2" id="inlineFormCustomSelect">
                             <option value="0">Status</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            <option value="1">Paused</option>
+                            <option value="2">Running</option>
                         </Form.Select>
                     </Col>
                     <Col xs="auto">
@@ -69,45 +65,31 @@ export default function AlarmsListing() {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="light" id="dropdown-basic">
-                                <FontAwesomeIcon icon={faEllipsisV} />
-                            </Dropdown.Toggle>
+                {alarms.map(alarm =>
+                    (<tr>
+                        <td>{alarm.name}</td>
+                        <td>{alarm.source}</td>
+                        <td>{alarm.metric}</td>
+                        <td>{alarm.triggerValue}</td>
+                        <td>{alarm.paused === 0 ? 'False' : 'True'}</td>
+                        <td>
+                            <Dropdown>
+                                <Dropdown.Toggle variant="light" id="dropdown-basic">
+                                    <FontAwesomeIcon icon={faEllipsisV} />
+                                </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
-                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </td>
-                </tr>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-2">Delete</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setAlarms({paused: 1 - alarm.paused})}>{alarm.paused === 0 ? 'Resume' : 'Pause'}</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </td>
+                    </tr>)
+                )}
                 </tbody>
             </Table>
-            <Button variant="primary" className="alarms--new" onClick={handleShow}>
-                <FontAwesomeIcon icon={faPlus} />
-            </Button>
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <AddAlarm createAlarm={MockBackend.addAlarm}/>
         </Container>
     );
 }
