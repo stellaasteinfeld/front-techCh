@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useReducer, useState} from "react";
 
 import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -6,7 +6,7 @@ import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import Form from 'react-bootstrap/Form';
 
-export default function AddAlarm({createAlarm}) {
+export default function AddAlarm({createAlarm, refreshAlarmsTable}) {
     const [show, setShow] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -16,6 +16,12 @@ export default function AddAlarm({createAlarm}) {
         paused: 0
     });
     const [validated, setValidated] = useState(false);
+    const forceUpdate = useReducer(() => ({}))[1];
+
+    function refreshComponent(){
+        refreshAlarmsTable();
+        forceUpdate();
+    }
     const handleClose = () => setShow(false);
 
     function handleChange(event) {
@@ -42,7 +48,7 @@ export default function AddAlarm({createAlarm}) {
         if (form.checkValidity() === false) {
             setValidated(true);
         } else {
-            createAlarm(formData);
+            createAlarm(...[formData]);
             setFormData({
                 name: '',
                 source: '',
@@ -52,6 +58,8 @@ export default function AddAlarm({createAlarm}) {
             });
             setValidated(false);
         }
+        refreshComponent();
+        setShow(false);
     }
 
     return(
