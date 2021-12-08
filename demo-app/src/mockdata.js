@@ -9,7 +9,6 @@ let Alarms = [
 
 const MockBackend = {
     listAlarms: () => Alarms,
-    getAlarm: (alarm_id) => _.find(Alarms, ['id', alarm_id]),
     addAlarm: (alarm) => {
         if (typeof alarm.name != "string" || alarm.name === '') {
             throw new Error('Alarm name is missing');
@@ -20,6 +19,17 @@ const MockBackend = {
         alarm.id = _.max(Alarms.map(a => a.id)) + 1;
         Alarms.push(alarm);
         return alarm;
+    },
+    editAlarm: (alarm_id, newData) => {
+        if (typeof newData.name != "string" || newData.name === '') {
+            throw new Error('Alarm name is missing');
+        }
+        if (typeof newData.triggerValue != "number" || newData.triggerValue < 0) {
+            throw new Error('Alarm trigger value need to be a positive number');
+        }
+
+        const oldAlarm = _.find(Alarms, ['id', alarm_id]);
+        oldAlarm.replace(newData);
     },
     removeAlarm: (alarm_id) => {Alarms = Alarms.filter(c => c.id !== alarm_id)},
 
